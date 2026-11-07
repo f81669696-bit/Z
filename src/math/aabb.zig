@@ -8,10 +8,10 @@ pub const AABB = struct {
         return .{ .min = min, .max = max };
     }
 
-    pub fn fromCenter(center: Vec3, half: Vec3) AABB {
+    pub fn fromCenter(c: Vec3, half: Vec3) AABB {
         return .{
-            .min = center.sub(half),
-            .max = center.add(half),
+            .min = c.sub(half),
+            .max = c.add(half),
         };
     }
 
