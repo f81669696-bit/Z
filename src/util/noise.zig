@@ -1,6 +1,5 @@
 const std = @import("std");
 
-// Permutation table for Perlin noise
 const perm: [512]u8 = blk: {
     const p = [256]u8{
         151,160,137,91,90,15,131,13,201,95,96,53,194,233,7,225,
@@ -54,19 +53,23 @@ pub fn perlin(x: f32, y: f32, z: f32) f32 {
     const u = fade(xf);
     const v = fade(yf);
     const w = fade(zf);
-    const a  = perm[xi] +% yi;
-    const aa = perm[a]  +% zi;
-    const ab = perm[a+%1]+% zi;
-    const b  = perm[xi+%1]+% yi;
-    const ba = perm[b]  +% zi;
-    const bb = perm[b+%1]+% zi;
+    const a   = perm[xi] +% yi;
+    const aa  = perm[a] +% zi;
+    const ab  = perm[a +% 1] +% zi;
+    const b   = perm[xi +% 1] +% yi;
+    const ba  = perm[b] +% zi;
+    const bb  = perm[b +% 1] +% zi;
     return lerp(w,
         lerp(v,
-            lerp(u, grad(perm[aa], xf, yf, zf),       grad(perm[ba], xf-1, yf, zf)),
-            lerp(u, grad(perm[ab], xf, yf-1, zf),     grad(perm[bb], xf-1, yf-1, zf))),
+            lerp(u, grad(perm[aa],     xf,   yf,   zf),
+                    grad(perm[ba],     xf-1, yf,   zf)),
+            lerp(u, grad(perm[ab],     xf,   yf-1, zf),
+                    grad(perm[bb],     xf-1, yf-1, zf))),
         lerp(v,
-            lerp(u, grad(perm[aa+%1], xf, yf, zf-1), grad(perm[ba+%1], xf-1, yf, zf-1)),
-            lerp(u, grad(perm[ab+%1], xf, yf-1, zf-1), grad(perm[bb+%1], xf-1, yf-1, zf-1))));
+            lerp(u, grad(perm[aa +% 1], xf,   yf,   zf-1),
+                    grad(perm[ba +% 1], xf-1, yf,   zf-1)),
+            lerp(u, grad(perm[ab +% 1], xf,   yf-1, zf-1),
+                    grad(perm[bb +% 1], xf-1, yf-1, zf-1))));
 }
 
 pub fn octaves(x: f32, y: f32, z: f32, octs: u32, persistence: f32, lacunarity: f32) f32 {
