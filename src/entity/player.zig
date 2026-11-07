@@ -86,21 +86,17 @@ pub const Player = struct {
             self.on_ground = false;
         }
 
-        // mouse look
         const sens: f32 = 0.002;
         self.yaw   += input.mouse_dx * sens;
         self.pitch -= input.mouse_dy * sens;
         const max_pitch = std.math.pi * 0.499;
         self.pitch = std.math.clamp(self.pitch, -max_pitch, max_pitch);
 
-        // gravity
         if (!self.on_ground) {
             self.vel.y -= GRAVITY * dt;
             if (self.vel.y < -TERMINAL_VEL) self.vel.y = -TERMINAL_VEL;
         }
 
-        // apply — collision resolved outside
         self.pos = self.pos.add(self.vel.scale(dt));
-        _ = dt;
     }
 };
