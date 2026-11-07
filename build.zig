@@ -18,12 +18,12 @@ pub fn build(b: *std.Build) void {
     const run_step = b.step("run", "Run cube");
     run_step.dependOn(&run_cmd.step);
 
-    const test_step = b.step("test", "Run tests");
-    const unit_tests = b.addTest(.{
+    const test_exe = b.addTest(.{
         .root_source_file = b.path("src/main.zig"),
         .target = target,
         .optimize = optimize,
     });
-    const run_unit_tests = b.addRunArtifact(unit_tests);
-    test_step.dependOn(&run_unit_tests.step);
+    const test_run = b.addRunArtifact(test_exe);
+    const test_step = b.step("test", "Run tests");
+    test_step.dependOn(&test_run.step);
 }
