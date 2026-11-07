@@ -14,28 +14,24 @@ fn shouldLog(level: Level) bool {
 
 pub fn debug(comptime fmt: []const u8, args: anytype) void {
     if (!shouldLog(.debug)) return;
-    const stderr = std.io.getStdErr().writer();
-    stderr.print("[DEBUG] " ++ fmt ++ "
+    std.io.getStdErr().writer().print("[DEBUG] " ++ fmt ++ "
 ", args) catch {};
 }
 
 pub fn info(comptime fmt: []const u8, args: anytype) void {
     if (!shouldLog(.info)) return;
-    const stderr = std.io.getStdErr().writer();
-    stderr.print("[INFO]  " ++ fmt ++ "
+    std.io.getStdErr().writer().print("[INFO]  " ++ fmt ++ "
 ", args) catch {};
 }
 
 pub fn warn(comptime fmt: []const u8, args: anytype) void {
     if (!shouldLog(.warn)) return;
-    const stderr = std.io.getStdErr().writer();
-    stderr.print("[WARN]  " ++ fmt ++ "
+    std.io.getStdErr().writer().print("[WARN]  " ++ fmt ++ "
 ", args) catch {};
 }
 
 pub fn err(comptime fmt: []const u8, args: anytype) void {
     if (!shouldLog(.err)) return;
-    const stderr = std.io.getStdErr().writer();
-    stderr.print("[ERR]   " ++ fmt ++ "
+    std.io.getStdErr().writer().print("[ERR]   " ++ fmt ++ "
 ", args) catch {};
 }
