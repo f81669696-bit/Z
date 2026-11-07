@@ -1,15 +1,19 @@
 const std = @import("std");
 
 pub fn build(b: *std.Build) void {
-    const target = b.standardTargetOptions(.{});
+    const target   = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
 
     const exe = b.addExecutable(.{
-        .name = "cube",
+        .name            = "cube",
         .root_source_file = b.path("src/main.zig"),
-        .target = target,
-        .optimize = optimize,
+        .target          = target,
+        .optimize        = optimize,
     });
+
+    // link system SDL3 (installed via apt or present as libSDL3.so)
+    exe.linkSystemLibrary("SDL3");
+    exe.linkLibC();
 
     b.installArtifact(exe);
 
@@ -20,10 +24,10 @@ pub fn build(b: *std.Build) void {
 
     const test_exe = b.addTest(.{
         .root_source_file = b.path("src/main.zig"),
-        .target = target,
-        .optimize = optimize,
+        .target          = target,
+        .optimize        = optimize,
     });
-    const test_run = b.addRunArtifact(test_exe);
+    const test_run  = b.addRunArtifact(test_exe);
     const test_step = b.step("test", "Run tests");
     test_step.dependOn(&test_run.step);
 }
