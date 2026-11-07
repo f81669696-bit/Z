@@ -12,22 +12,29 @@ fn shouldLog(level: Level) bool {
     return @intFromEnum(level) >= @intFromEnum(log_level);
 }
 
+fn print(comptime prefix: []const u8, comptime fmt: []const u8, args: anytype) void {
+    const w = std.io.getStdErr().writer();
+    w.print(prefix, .{}) catch {};
+    w.print(fmt, args) catch {};
+    w.writeByte('\n') catch {};
+}
+
 pub fn debug(comptime fmt: []const u8, args: anytype) void {
     if (!shouldLog(.debug)) return;
-    std.io.getStdErr().writer().print("[DEBUG] " ++ fmt ++ "\n", args) catch {};
+    print("[DEBUG] ", fmt, args);
 }
 
 pub fn info(comptime fmt: []const u8, args: anytype) void {
     if (!shouldLog(.info)) return;
-    std.io.getStdErr().writer().print("[INFO]  " ++ fmt ++ "\n", args) catch {};
+    print("[INFO]  ", fmt, args);
 }
 
 pub fn warn(comptime fmt: []const u8, args: anytype) void {
     if (!shouldLog(.warn)) return;
-    std.io.getStdErr().writer().print("[WARN]  " ++ fmt ++ "\n", args) catch {};
+    print("[WARN]  ", fmt, args);
 }
 
 pub fn err(comptime fmt: []const u8, args: anytype) void {
     if (!shouldLog(.err)) return;
-    std.io.getStdErr().writer().print("[ERR]   " ++ fmt ++ "\n", args) catch {};
+    print("[ERR]   ", fmt, args);
 }
